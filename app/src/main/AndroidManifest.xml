@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.evastos.movies">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:name=".MoviesApp"
         android:allowBackup="true"
@@ -20,6 +23,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.movie.details.MovieDetailsActivity" />
+
+        <receiver android:name=".data.network.connectivity.NetworkConnectivityReceiver">
+            <intent-filter>
+                <action
+                    android:name="android.net.conn.CONNECTIVITY_CHANGE"
+                    tools:ignore="BatteryLife" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
