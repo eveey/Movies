@@ -1,8 +1,11 @@
 package com.evastos.movies.data.model.moviedb
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 @JsonClass(generateAdapter = true)
 data class Movie(
     @Json(name = "poster_path") val posterPath: String?,
@@ -19,4 +22,4 @@ data class Movie(
     @Json(name = "vote_count") val voteCount: Int?,
     @Json(name = "video") val isVideo: Boolean?,
     @Json(name = "vote_average") val voteAverage: Double?
-)
+) : Parcelable
