@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Movies</string>
+
+    <string name="action_retry">Retry</string>
+    <string name="network_connectivity_banner">No network connection</string>
+
+    <string name="api_error_server_unavailable">Service is temporarily unavailable. Please try again later.</string>
+    <string name="api_error_client">You don\'t have permissions to perform this request. Please contact support.</string>
+    <string name="api_error_network">Network unavailable. Please check your internet connection or try again later.</string>
+    <string name="api_error_general">Failed to get movies. Please contact support or try again later.</string>
 </resources>
