@@ -72,8 +72,8 @@ abstract class BaseActivity : AppCompatActivity() {
     protected fun showSnackbar(
         view: View,
         snackbarMessage: String,
-        actionMessage: String? = null,
-        action: (() -> Unit)? = null
+        actionMessage: String,
+        action: (() -> Unit)
     ) {
         view.postDelayed({
             snackbar = showSnackbarForView(view, snackbarMessage, actionMessage, action)
