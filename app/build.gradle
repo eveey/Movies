@@ -15,6 +15,7 @@ android {
     def STRING = 'String'
     def API_KEY = 'API_KEY'
     def BASE_API_URL = 'BASE_API_URL'
+    def BASE_IMAGE_URL = 'BASE_IMAGE_URL'
 
     defaultConfig {
         applicationId buildConfig.packageName
@@ -27,6 +28,7 @@ android {
 
         buildConfigField STRING, API_KEY, '"c999f6242c95d59b0dc2fa0e3daea5e4"'
         buildConfigField STRING, BASE_API_URL, '"https://api.themoviedb.org/3/"'
+        buildConfigField STRING, BASE_IMAGE_URL, '"http://image.tmdb.org/t/p/w185/"'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -116,7 +118,7 @@ dependencies {
 
     // Image
     implementation "com.github.bumptech.glide:glide:$versions.glideVersion"
-    kapt "com.github.bumptech.glide:compiler:$versions.glideCompilerVersion"
+    kapt "com.github.bumptech.glide:compiler:$versions.glideVersion"
 
     // Dependency injection
     implementation "javax.annotation:javax.annotation-api:$versions.javaAnnotationVersion"

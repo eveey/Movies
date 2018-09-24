@@ -4,4 +4,6 @@
     <color name="primaryDark">#303F9F</color>
     <color name="accent">#bc47c6</color>
     <color name="activityBackground">#303030</color>
+    <color name="white">@android:color/white</color>
+    <color name="black">@android:color/black</color>
 </resources>

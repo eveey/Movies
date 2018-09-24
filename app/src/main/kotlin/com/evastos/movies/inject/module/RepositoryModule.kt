@@ -1,7 +1,7 @@
 package com.evastos.movies.inject.module
 
-import com.evastos.movies.domain.Repositories
-import com.evastos.movies.domain.movie.overview.MovieOverviewRepository
+import com.evastos.movies.domain.repository.Repositories
+import com.evastos.movies.domain.repository.movie.overview.MovieOverviewRepository
 import dagger.Binds
 import dagger.Module
 
@@ -10,7 +10,7 @@ import dagger.Module
 abstract class RepositoryModule {
 
     @Binds
-    abstract fun bindProductDetailsRepository(
+    abstract fun bindMovieOverviewRepository(
         movieOverviewRepository: MovieOverviewRepository
     ): Repositories.MovieOverviewRepository
 }

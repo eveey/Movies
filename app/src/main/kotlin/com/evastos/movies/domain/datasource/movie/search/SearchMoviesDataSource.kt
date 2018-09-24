@@ -1,20 +1,25 @@
-package com.evastos.movies.domain.movie.overview.datasource
+package com.evastos.movies.domain.datasource.movie.search
 
-import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.arch.paging.PageKeyedDataSource
+import com.evastos.movies.data.exception.ExceptionMappers
 import com.evastos.movies.data.model.moviedb.Movie
+import com.evastos.movies.data.model.moviedb.nowplaying.NowPlayingMoviesResponse
 import com.evastos.movies.data.rx.applySchedulers
+import com.evastos.movies.data.rx.mapException
 import com.evastos.movies.data.service.moviedb.MovieDbService
-import com.evastos.movies.domain.movie.overview.datasource.model.LoadingState
+import com.evastos.movies.domain.model.LoadingState
+import com.evastos.movies.ui.util.exception.ExceptionMessageProviders
 import com.evastos.movies.ui.util.region.RegionProvider
 import io.reactivex.disposables.CompositeDisposable
 
 /**
  * A data source that uses the before/after keys returned in page requests.
  */
-class MovieOverviewDataSource(
+class SearchMoviesDataSource(
     private val movieDbService: MovieDbService,
+    private val exceptionMapper: ExceptionMappers.MovieDb,
+    private val exceptionMessageProvider: ExceptionMessageProviders.MovieDb,
     private val regionProvider: RegionProvider,
     private val disposables: CompositeDisposable) : PageKeyedDataSource<Int, Movie>() {
 
@@ -25,9 +30,7 @@ class MovieOverviewDataSource(
      * There is no sync on the state because paging will always call loadInitial first then wait
      * for it to return some success value before calling loadAfter.
      */
-    val networkState = MutableLiveData<LoadingState>()
-
-    val initialLoad = MutableLiveData<LoadingState>()
+    val loadingState = MutableLiveData<LoadingState>()
 
     fun retryAllFailed() {
         val prevRetry = retry
@@ -42,36 +45,26 @@ class MovieOverviewDataSource(
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Movie>) {
-        networkState.postValue(LoadingState.LOADING)
+        loadingState.postValue(LoadingState.Loading())
         disposables.add(
             movieDbService.getNowPlaying(
                 page = params.key,
                 region = regionProvider.getSystemRegion()
             )
                     .applySchedulers()
+                    .mapException(exceptionMapper)
                     .subscribe({ response ->
-                        val nextPage = response.page?.plus(1)
-                        val totalPages = response.totalPages
-
-                        val nextPageToSearch =
-                                if (nextPage != null && totalPages != null && nextPage <= totalPages) {
-                                    nextPage
-                                } else {
-                                    null
-                                }
-
                         val movies = response.results ?: emptyList()
-
                         retry = null
-                        networkState.postValue(LoadingState.LOADED)
-                        initialLoad.postValue(LoadingState.LOADED)
-                        callback.onResult(movies, nextPageToSearch)
+                        loadingState.postValue(LoadingState.LoadingSuccess())
+                        callback.onResult(movies, getNextPage(response))
 
                     }, {
                         retry = {
                             loadAfter(params, callback)
                         }
-                        networkState.postValue(LoadingState.ERROR)
+                        loadingState.postValue(
+                            LoadingState.LoadingError(exceptionMessageProvider.getMessage(it)))
                     }))
 
     }
@@ -79,36 +72,36 @@ class MovieOverviewDataSource(
     override fun loadInitial(
         params: LoadInitialParams<Int>,
         callback: LoadInitialCallback<Int, Movie>) {
-        networkState.postValue(LoadingState.LOADING)
-        initialLoad.postValue(LoadingState.LOADING)
+        loadingState.postValue(LoadingState.Loading())
 
         disposables.add(
             movieDbService.getNowPlaying(page = 1, region = regionProvider.getSystemRegion())
                     .applySchedulers()
                     .subscribe({ response ->
-                        val nextPage = response.page?.plus(1)
-                        val totalPages = response.totalPages
-
-                        val nextPageToSearch =
-                                if (nextPage != null && totalPages != null && nextPage <= totalPages) {
-                                    nextPage
-                                } else {
-                                    null
-                                }
-
+                        val nextPage = getNextPage(response)
+                        val previousPage = response?.page?.minus(1)
                         val movies = response.results ?: emptyList()
 
                         retry = null
-                        networkState.postValue(LoadingState.LOADED)
-                        initialLoad.postValue(LoadingState.LOADED)
-                        callback.onResult(movies, response?.page?.minus(1), nextPageToSearch)
+                        loadingState.postValue(LoadingState.LoadingSuccess())
+                        callback.onResult(movies, previousPage, nextPage)
 
                     }, {
                         retry = {
                             loadInitial(params, callback)
                         }
-                        networkState.postValue(LoadingState.ERROR)
-                        initialLoad.postValue(LoadingState.ERROR)
+                        val errorMessage = exceptionMessageProvider.getMessage(it)
+                        loadingState.postValue(LoadingState.LoadingError(errorMessage))
                     }))
+    }
+
+    private fun getNextPage(response: NowPlayingMoviesResponse): Int? {
+        val nextPageVal = response.page?.plus(1)
+        val totalPagesVal = response.totalPages
+        return if (nextPageVal != null && totalPagesVal != null && nextPageVal <= totalPagesVal) {
+            nextPageVal
+        } else {
+            null
+        }
     }
 }

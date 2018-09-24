@@ -2,6 +2,7 @@ package com.evastos.movies.inject.module
 
 import android.content.Context
 import com.evastos.movies.BuildConfig
+import com.evastos.movies.data.encode.Encoder
 import com.evastos.movies.data.network.interceptor.HeadersInterceptor
 import com.evastos.movies.inject.qualifier.AppContext
 import com.readystatesoftware.chuck.ChuckInterceptor
@@ -53,4 +54,10 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideMoshi(): Moshi = Moshi.Builder().build()
+
+    @Provides
+    @Singleton
+    fun provideEncoder(): Encoder {
+        return Encoder()
+    }
 }

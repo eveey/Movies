@@ -1,20 +1,25 @@
 package com.evastos.movies.ui.movie.overview.adapter
 
+import android.annotation.SuppressLint
 import android.arch.paging.PagedListAdapter
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import com.evastos.movies.R
 import com.evastos.movies.data.model.moviedb.Movie
+import com.evastos.movies.inject.module.GlideRequests
+import com.evastos.movies.ui.util.extensions.debounceClicks
 import com.evastos.movies.ui.util.extensions.inflate
-import kotlinx.android.synthetic.main.recyclerview_item_movie.view.movieTitleTextView
+import com.evastos.movies.ui.util.extensions.loadMoviePoster
+import kotlinx.android.synthetic.main.layout_item_movie.view.moviePosterImageButton
 
-class MoviesAdapter(private val context: Context) :
-    PagedListAdapter<Movie, RecyclerView.ViewHolder>(MovieDiffItemCallback) {
+class MoviesAdapter(
+    private val glideRequests: GlideRequests,
+    private val movieClickAction: (Movie?) -> Unit
+) : PagedListAdapter<Movie, RecyclerView.ViewHolder>(MovieDiffItemCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return MovieItemViewHolder(parent.inflate(R.layout.recyclerview_item_movie))
+        return MovieItemViewHolder(parent.inflate(R.layout.layout_item_movie))
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -28,10 +33,14 @@ class MoviesAdapter(private val context: Context) :
     private inner class MovieItemViewHolder(movieItemView: View) :
         RecyclerView.ViewHolder(movieItemView) {
 
+        @SuppressLint("RxLeakedSubscription", "RxSubscribeOnError")
         fun bind(movie: Movie?) {
-            movie?.let {
-                with(itemView) {
-                    movieTitleTextView.text = it.title
+            with(itemView) {
+                glideRequests.loadMoviePoster(movie, moviePosterImageButton)
+                moviePosterImageButton.debounceClicks().subscribe { _ ->
+                    movie?.let {
+                        movieClickAction.invoke(it)
+                    }
                 }
             }
         }

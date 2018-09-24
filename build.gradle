@@ -38,13 +38,14 @@ buildscript {
             'testRunnerVersion'       : '1.0.2',
             'espressoVersion'         : '3.0.2',
             'chuckVersion'            : '1.1.0',
-            'glideVersion'            : '4.7.1',
-            'glideCompilerVersion'    : '4.4.0'
+            'glideVersion'            : '4.8.0'
     ]
 
     repositories {
         google()
         jcenter()
+        mavenCentral()
+        maven { url 'https://maven.google.com' }
         maven { url 'https://jitpack.io' }
         maven { url "https://plugins.gradle.org/m2/" }
         maven { url 'https://maven.fabric.io/public' }

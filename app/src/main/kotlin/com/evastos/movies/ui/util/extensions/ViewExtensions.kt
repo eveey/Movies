@@ -1,7 +1,6 @@
 package com.evastos.movies.ui.util.extensions
 
 import android.support.annotation.LayoutRes
-import android.support.design.widget.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,29 +32,6 @@ fun View.enable() {
 
 fun View.disable() {
     isEnabled = false
-}
-
-fun showSnackbarForView(
-    view: View,
-    snackbarMessage: String,
-    actionMessage: String?,
-    action: (() -> Unit)
-): Snackbar {
-    return Snackbar.make(view, snackbarMessage, Snackbar.LENGTH_INDEFINITE)
-            .apply {
-                setAction(actionMessage, View.OnClickListener {
-                    action.invoke()
-                })
-                show()
-            }
-}
-
-fun Snackbar?.hideIfShown() {
-    this?.let {
-        if (it.isShown) {
-            it.dismiss()
-        }
-    }
 }
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View {

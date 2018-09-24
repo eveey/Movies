@@ -1,7 +1,6 @@
 package com.evastos.movies.inject.module
 
 import com.evastos.movies.BuildConfig
-import com.evastos.movies.data.encode.Encoder
 import com.evastos.movies.data.service.moviedb.MovieDbService
 import com.squareup.moshi.Moshi
 import dagger.Module
@@ -33,11 +32,5 @@ class MovieDbModule {
     @Singleton
     fun provideMovieDbService(retrofit: Retrofit): MovieDbService {
         return retrofit.create(MovieDbService::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun provideEncoder(): Encoder {
-        return Encoder()
     }
 }
