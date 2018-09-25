@@ -75,28 +75,28 @@ class NowPlayingMoviesDataSource(
         callback: LoadInitialCallback<Int, Movie>
     ) {
         loadingState.postValue(LoadingState.Loading())
+        disposables.add(
+            movieDbService.getNowPlaying(
+                page = PAGE_INITIAL,
+                region = regionProvider.getSystemRegion()
+            )
+                    .applySchedulers()
+                    .mapException(exceptionMapper)
+                    .subscribe({ response ->
+                        val nextPage = getNextPage(response)
+                        val previousPage = response?.page?.minus(1)
+                        val movies = response.results ?: emptyList()
 
-        disposables.add(movieDbService.getNowPlaying(
-            page = PAGE_INITIAL,
-            region = regionProvider.getSystemRegion()
-        )
-                .applySchedulers()
-                .mapException(exceptionMapper)
-                .subscribe({ response ->
-                    val nextPage = getNextPage(response)
-                    val previousPage = response?.page?.minus(1)
-                    val movies = response.results ?: emptyList()
-
-                    retry = null
-                    loadingState.postValue(LoadingState.LoadingSuccess())
-                    callback.onResult(movies, previousPage, nextPage)
-                }, {
-                    retry = {
-                        loadInitial(params, callback)
-                    }
-                    val errorMessage = exceptionMessageProvider.getMessage(it)
-                    loadingState.postValue(LoadingState.LoadingError(errorMessage))
-                })
+                        retry = null
+                        loadingState.postValue(LoadingState.LoadingSuccess())
+                        callback.onResult(movies, previousPage, nextPage)
+                    }, {
+                        retry = {
+                            loadInitial(params, callback)
+                        }
+                        val errorMessage = exceptionMessageProvider.getMessage(it)
+                        loadingState.postValue(LoadingState.LoadingError(errorMessage))
+                    })
         )
     }
 

@@ -8,6 +8,21 @@
     android:animateLayoutChanges="true"
     tools:context=".ui.movie.overview.MovieOverviewActivity">
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshMovies"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        app:layout_constraintBottom_toTopOf="@+id/loadingStateView"
+        app:layout_constraintTop_toBottomOf="@+id/networkConnectivityBanner">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/moviesRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            app:layoutManager="android.support.v7.widget.GridLayoutManager"
+            />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
     <include
         android:id="@+id/networkConnectivityBanner"
         layout="@layout/network_connectivity_banner"
@@ -15,14 +30,6 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/moviesRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        app:layoutManager="android.support.v7.widget.GridLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/loadingStateView"
-        app:layout_constraintTop_toBottomOf="@+id/networkConnectivityBanner" />
 
     <include
         android:id="@+id/loadingStateView"

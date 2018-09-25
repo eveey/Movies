@@ -59,6 +59,7 @@ class MovieOverviewRepository
     @MainThread
     override fun searchMovies(query: String, disposables: CompositeDisposable): Listing<Movie> {
         val sourceFactory = SearchMoviesDataSourceFactory(
+            encoder.encodeUrlQuery(query),
             movieDbService,
             exceptionMapper,
             exceptionMessageProvider,
