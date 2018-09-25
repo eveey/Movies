@@ -15,6 +15,7 @@ android {
     def STRING = 'String'
     def API_KEY = 'API_KEY'
     def BASE_API_URL = 'BASE_API_URL'
+    def BASE_IMAGE_URL = 'BASE_IMAGE_URL'
 
     defaultConfig {
         applicationId buildConfig.packageName
@@ -25,8 +26,14 @@ android {
         versionCode 1
         versionName "0.1.0"
 
-        buildConfigField STRING, API_KEY, '"c999f6242c95d59b0dc2fa0e3daea5e4"'
+        Properties props = new Properties()
+        if (file('../local.properties').exists()) {
+            // if it doesn't exist, the props will all be null and the builds will fail
+            props.load(new FileInputStream(file('../local.properties')))
+        }
+        buildConfigField STRING, API_KEY, props['apiKey']
         buildConfigField STRING, BASE_API_URL, '"https://api.themoviedb.org/3/"'
+        buildConfigField STRING, BASE_IMAGE_URL, '"http://image.tmdb.org/t/p/w342/"'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -103,7 +110,6 @@ dependencies {
     implementation "com.android.support:cardview-v7:$versions.supportLibVersion"
     implementation "com.android.support:design:$versions.supportLibVersion"
     implementation "com.android.support.constraint:constraint-layout:$versions.constraintLayoutVersion"
-    implementation "androidx.core:core-ktx:$versions.ktxVersion"
 
     // Network
     implementation "com.squareup.okhttp3:okhttp:$versions.okhttpVersion"
@@ -117,7 +123,7 @@ dependencies {
 
     // Image
     implementation "com.github.bumptech.glide:glide:$versions.glideVersion"
-    kapt "com.github.bumptech.glide:compiler:$versions.glideCompilerVersion"
+    kapt "com.github.bumptech.glide:compiler:$versions.glideVersion"
 
     // Dependency injection
     implementation "javax.annotation:javax.annotation-api:$versions.javaAnnotationVersion"
@@ -131,6 +137,9 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$versions.archVersion"
     implementation "android.arch.lifecycle:viewmodel:$versions.archVersion"
     kapt "android.arch.lifecycle:compiler:$versions.archVersion"
+
+    // Paging
+    implementation "android.arch.paging:runtime:$versions.archPagingVersion"
 
     // RX
     implementation "io.reactivex.rxjava2:rxjava:$versions.rxJavaVersion"

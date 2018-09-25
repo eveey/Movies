@@ -22,4 +22,17 @@ data class Movie(
     @Json(name = "vote_count") val voteCount: Int?,
     @Json(name = "video") val isVideo: Boolean?,
     @Json(name = "vote_average") val voteAverage: Double?
-) : Parcelable
+) : Parcelable {
+
+    override fun equals(other: Any?): Boolean {
+        if (other === this)
+            return true
+
+        val movie = other as? Movie?
+        return movie?.id === this.id
+    }
+
+    override fun hashCode(): Int {
+        return id?.hashCode() ?: super.hashCode()
+    }
+}

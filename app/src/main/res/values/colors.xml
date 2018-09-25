@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#ef58fc</color>
-    <color name="colorBackground">#303030</color>
+    <color name="primary">#3F51B5</color>
+    <color name="primaryDark">#303F9F</color>
+    <color name="accent">#bc47c6</color>
+    <color name="activityBackground">#303030</color>
+    <color name="white">@android:color/white</color>
+    <color name="black">@android:color/black</color>
+    <color name="moviePressed">#4D000000</color>
+    <color name="transparent">@android:color/transparent</color>
 </resources>
