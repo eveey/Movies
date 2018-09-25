@@ -21,7 +21,8 @@ class SearchMoviesDataSource(
     private val exceptionMapper: ExceptionMappers.MovieDb,
     private val exceptionMessageProvider: ExceptionMessageProviders.MovieDb,
     private val regionProvider: RegionProvider,
-    private val disposables: CompositeDisposable) : PageKeyedDataSource<Int, Movie>() {
+    private val disposables: CompositeDisposable
+) : PageKeyedDataSource<Int, Movie>() {
 
     // keep a function reference for the retry event
     private var retry: (() -> Any)? = null
@@ -40,38 +41,38 @@ class SearchMoviesDataSource(
 
     override fun loadBefore(
         params: LoadParams<Int>,
-        callback: LoadCallback<Int, Movie>) {
+        callback: LoadCallback<Int, Movie>
+    ) {
         // ignored, since we only ever append to our initial load
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Movie>) {
         loadingState.postValue(LoadingState.Loading())
-        disposables.add(
-            movieDbService.getNowPlaying(
-                page = params.key,
-                region = regionProvider.getSystemRegion()
-            )
-                    .applySchedulers()
-                    .mapException(exceptionMapper)
-                    .subscribe({ response ->
-                        val movies = response.results ?: emptyList()
-                        retry = null
-                        loadingState.postValue(LoadingState.LoadingSuccess())
-                        callback.onResult(movies, getNextPage(response))
-
-                    }, {
-                        retry = {
-                            loadAfter(params, callback)
-                        }
-                        loadingState.postValue(
-                            LoadingState.LoadingError(exceptionMessageProvider.getMessage(it)))
-                    }))
-
+        disposables.add(movieDbService.getNowPlaying(
+            page = params.key,
+            region = regionProvider.getSystemRegion()
+        )
+                .applySchedulers()
+                .mapException(exceptionMapper)
+                .subscribe({ response ->
+                    val movies = response.results ?: emptyList()
+                    retry = null
+                    loadingState.postValue(LoadingState.LoadingSuccess())
+                    callback.onResult(movies, getNextPage(response))
+                }, {
+                    retry = {
+                        loadAfter(params, callback)
+                    }
+                    loadingState.postValue(
+                        LoadingState.LoadingError(exceptionMessageProvider.getMessage(it)))
+                })
+        )
     }
 
     override fun loadInitial(
         params: LoadInitialParams<Int>,
-        callback: LoadInitialCallback<Int, Movie>) {
+        callback: LoadInitialCallback<Int, Movie>
+    ) {
         loadingState.postValue(LoadingState.Loading())
 
         disposables.add(
@@ -85,14 +86,14 @@ class SearchMoviesDataSource(
                         retry = null
                         loadingState.postValue(LoadingState.LoadingSuccess())
                         callback.onResult(movies, previousPage, nextPage)
-
                     }, {
                         retry = {
                             loadInitial(params, callback)
                         }
                         val errorMessage = exceptionMessageProvider.getMessage(it)
                         loadingState.postValue(LoadingState.LoadingError(errorMessage))
-                    }))
+                    })
+        )
     }
 
     private fun getNextPage(response: NowPlayingMoviesResponse): Int? {

@@ -28,8 +28,8 @@ data class Movie(
         if (other === this)
             return true
 
-        val movie = other as Movie?
-        return movie!!.id === this.id
+        val movie = other as? Movie?
+        return movie?.id === this.id
     }
 
     override fun hashCode(): Int {

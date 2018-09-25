@@ -5,13 +5,18 @@ import android.arch.paging.PagedListAdapter
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import com.evastos.movies.BuildConfig
 import com.evastos.movies.R
 import com.evastos.movies.data.model.moviedb.Movie
 import com.evastos.movies.inject.module.GlideRequests
 import com.evastos.movies.ui.util.extensions.debounceClicks
 import com.evastos.movies.ui.util.extensions.inflate
-import com.evastos.movies.ui.util.extensions.loadMoviePoster
-import kotlinx.android.synthetic.main.layout_item_movie.view.moviePosterImageButton
+import com.evastos.movies.ui.util.extensions.loadImage
+import com.evastos.movies.ui.util.extensions.setGone
+import com.evastos.movies.ui.util.extensions.setVisible
+import kotlinx.android.synthetic.main.layout_item_movie.view.movieOverlay
+import kotlinx.android.synthetic.main.layout_item_movie.view.moviePosterImageView
+import kotlinx.android.synthetic.main.layout_item_movie.view.movieTitleTextView
 
 class MoviesAdapter(
     private val glideRequests: GlideRequests,
@@ -36,8 +41,17 @@ class MoviesAdapter(
         @SuppressLint("RxLeakedSubscription", "RxSubscribeOnError")
         fun bind(movie: Movie?) {
             with(itemView) {
-                glideRequests.loadMoviePoster(movie, moviePosterImageButton)
-                moviePosterImageButton.debounceClicks().subscribe { _ ->
+                movieTitleTextView.setVisible()
+                movieTitleTextView.text = movie?.title
+                val posterPath = if (movie?.posterPath != null) {
+                    "${BuildConfig.BASE_IMAGE_URL}${movie.posterPath}"
+                } else {
+                    null
+                }
+                glideRequests.loadImage(posterPath, moviePosterImageView) {
+                    movieTitleTextView.setGone()
+                }
+                movieOverlay.debounceClicks().subscribe { _ ->
                     movie?.let {
                         movieClickAction.invoke(it)
                     }

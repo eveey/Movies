@@ -9,7 +9,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import com.evastos.movies.R
 import com.evastos.movies.data.model.moviedb.Movie
@@ -47,8 +46,7 @@ class MovieOverviewActivity : BaseActivity(), NetworkConnectivityObserver {
         viewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(MovieOverviewViewModel::class.java)
 
-        moviesRecyclerView.layoutManager =
-                GridLayoutManager(this, MOVIE_COLUMNS_NUM) as RecyclerView.LayoutManager?
+        moviesRecyclerView.layoutManager = GridLayoutManager(this, MOVIE_COLUMNS_NUM)
         val adapter = MoviesAdapter(GlideApp.with(this)) { movie: Movie? ->
             // open details screen
         }

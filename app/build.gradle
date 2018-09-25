@@ -26,9 +26,14 @@ android {
         versionCode 1
         versionName "0.1.0"
 
-        buildConfigField STRING, API_KEY, '"c999f6242c95d59b0dc2fa0e3daea5e4"'
+        Properties props = new Properties()
+        if (file('../local.properties').exists()) {
+            // if it doesn't exist, the props will all be null and the builds will fail
+            props.load(new FileInputStream(file('../local.properties')))
+        }
+        buildConfigField STRING, API_KEY, props['apiKey']
         buildConfigField STRING, BASE_API_URL, '"https://api.themoviedb.org/3/"'
-        buildConfigField STRING, BASE_IMAGE_URL, '"http://image.tmdb.org/t/p/w185/"'
+        buildConfigField STRING, BASE_IMAGE_URL, '"http://image.tmdb.org/t/p/w342/"'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

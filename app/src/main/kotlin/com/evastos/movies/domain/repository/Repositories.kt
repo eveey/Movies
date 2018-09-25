@@ -9,6 +9,7 @@ interface Repositories {
     interface MovieOverviewRepository {
 
         fun getNowPlayingMovies(disposables: CompositeDisposable): Listing<Movie>
+
         fun searchMovies(query: String, disposables: CompositeDisposable): Listing<Movie>
     }
 }

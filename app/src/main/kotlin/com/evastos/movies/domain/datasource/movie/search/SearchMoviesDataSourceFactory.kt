@@ -20,7 +20,8 @@ class SearchMoviesDataSourceFactory(
     private val exceptionMapper: ExceptionMappers.MovieDb,
     private val exceptionMessageProvider: ExceptionMessageProviders.MovieDb,
     private val regionProvider: RegionProvider,
-    private val disposables: CompositeDisposable) : DataSource.Factory<Int, Movie>() {
+    private val disposables: CompositeDisposable
+) : DataSource.Factory<Int, Movie>() {
 
     val sourceLiveData = MutableLiveData<NowPlayingMoviesDataSource>()
 
