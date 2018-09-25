@@ -5,7 +5,7 @@ import java.util.Locale
 class RegionProvider {
 
     companion object {
-        private const val VALID_REGION_CODE_LENGTH = 2
+        private const val REGION_CODE_VALID_LENGTH = 2
     }
 
     /**
@@ -14,7 +14,7 @@ class RegionProvider {
      */
     fun getSystemRegion(): String? {
         with(Locale.getDefault().country) {
-            if (length == VALID_REGION_CODE_LENGTH) {
+            if (length == REGION_CODE_VALID_LENGTH) {
                 return toUpperCase()
             }
         }
