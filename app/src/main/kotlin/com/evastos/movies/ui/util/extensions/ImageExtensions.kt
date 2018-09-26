@@ -27,7 +27,7 @@ fun GlideRequests.loadImage(
                         isFirstResource: Boolean
                     ): Boolean {
                         imageView.scaleType = ImageView.ScaleType.CENTER_INSIDE
-                        imageView.setImageResource(R.drawable.ic_broken_image_32)
+                        imageView.setImageResource(R.drawable.ic_broken_image)
                         return false
                     }
 
@@ -45,6 +45,6 @@ fun GlideRequests.loadImage(
                 .into(imageView)
     } else {
         imageView.scaleType = ImageView.ScaleType.CENTER_INSIDE
-        imageView.setImageResource(R.drawable.ic_broken_image_32)
+        imageView.setImageResource(R.drawable.ic_broken_image)
     }
 }

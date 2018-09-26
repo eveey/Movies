@@ -25,7 +25,7 @@ class MovieSuggestionsAdapter(
 
     /**
      * Sets the movie suggestions.
-     * Ugly solution but SearchView only takes an adapter that is a CursosAdapter.
+     * Ugly solution but SearchView only takes a CursorAdapter.
      */
     fun setSuggestions(suggestions: List<Movie>) {
         this.suggestions = suggestions
