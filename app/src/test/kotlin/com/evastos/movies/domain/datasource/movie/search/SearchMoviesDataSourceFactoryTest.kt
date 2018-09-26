@@ -44,7 +44,6 @@ class SearchMoviesDataSourceFactoryTest {
     fun create_postsSearchMoviesDataSource() {
         searchMoviesDataSourceFactory.sourceLiveData.observeForever(sourceLiveDataObserver)
 
-
         val sourceDataFactory = searchMoviesDataSourceFactory.create()
 
         verify(sourceLiveDataObserver).onChanged(sourceDataFactory as SearchMoviesDataSource)

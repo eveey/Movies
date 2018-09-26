@@ -1,6 +1,8 @@
 package com.evastos.movies
 
 import android.arch.lifecycle.MutableLiveData
+import android.arch.paging.DataSource
+import android.arch.paging.PageKeyedDataSource
 import android.arch.paging.PagedList
 import com.evastos.movies.data.model.moviedb.Movie
 import com.evastos.movies.data.model.moviedb.search.SearchMoviesResponse
@@ -9,7 +11,7 @@ import com.evastos.movies.domain.model.LoadingState
 import com.evastos.movies.ui.util.region.RegionProvider
 import com.nhaarman.mockito_kotlin.mock
 
-class TestUtil() {
+class TestUtil {
 
     val nowPlayingMovies = MutableLiveData<PagedList<Movie>>()
     val nowPlayingLoadingState = MutableLiveData<LoadingState>()
