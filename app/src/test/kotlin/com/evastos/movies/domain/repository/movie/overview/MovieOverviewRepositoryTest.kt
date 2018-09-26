@@ -4,7 +4,6 @@ import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.Observer
 import com.evastos.movies.RxImmediateSchedulerRule
 import com.evastos.movies.TestUtil
-import com.evastos.movies.data.encode.Encoder
 import com.evastos.movies.data.exception.ExceptionMappers
 import com.evastos.movies.data.exception.moviedb.MovieDbException
 import com.evastos.movies.data.model.moviedb.Movie
@@ -50,7 +49,6 @@ class MovieOverviewRepositoryTest {
 
         movieOverviewRepository = MovieOverviewRepository(
             movieDbService = movieDbService,
-            encoder = Encoder(),
             exceptionMapper = exceptionMapper,
             exceptionMessageProvider = exceptionMessageProvider,
             regionProvider = TestUtil.TestRegionProvider()
