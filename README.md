@@ -7,7 +7,7 @@ Movies are my thing.
 Sample Android app in [Kotlin](https://kotlinlang.org/) for viewing movies that are now playing in theaters from [The Movie DB](https://www.themoviedb.org/).
 
 ## Building the app
-* Gradle build tools
+* [Gradle](https://gradle.org/) build system
 * Requires [Java 8](https://java.com/en/download/faq/java8.xml)
 
 `Important note: to use the services you need to add your movie DB API KEY to project local.properties file like this:
