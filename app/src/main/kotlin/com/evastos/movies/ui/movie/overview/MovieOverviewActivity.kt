@@ -17,6 +17,7 @@ import com.evastos.movies.ui.base.network.connectivity.NetworkConnectivityObserv
 import com.evastos.movies.ui.movie.base.BaseActivity
 import com.evastos.movies.ui.movie.details.MovieDetailsActivity
 import com.evastos.movies.ui.movie.overview.adapter.MoviesAdapter
+import com.evastos.movies.ui.movie.overview.adapter.suggestions.MovieSuggestionsAdapter
 import com.evastos.movies.ui.util.extensions.debounceClicks
 import com.evastos.movies.ui.util.extensions.setGone
 import com.evastos.movies.ui.util.extensions.setVisible
@@ -37,6 +38,10 @@ class MovieOverviewActivity : BaseActivity(), NetworkConnectivityObserver {
 
     private lateinit var viewModel: MovieOverviewViewModel
 
+    private lateinit var movieSuggestionsAdapter: MovieSuggestionsAdapter
+
+    private var searchView: SearchView? = null
+
     private val handler = Handler()
 
     @SuppressLint("RxSubscribeOnError", "RxLeakedSubscription")
@@ -52,6 +57,8 @@ class MovieOverviewActivity : BaseActivity(), NetworkConnectivityObserver {
             viewModel.onMovieClick(movie)
         }
         moviesRecyclerView.adapter = adapter
+
+        movieSuggestionsAdapter = MovieSuggestionsAdapter(this)
 
         swipeRefreshMovies.setOnRefreshListener {
             viewModel.onRefresh()
@@ -88,6 +95,12 @@ class MovieOverviewActivity : BaseActivity(), NetworkConnectivityObserver {
             }
         })
 
+        viewModel.movieSuggestionsLiveData.observe(this, Observer { suggestions ->
+            suggestions?.let {
+                movieSuggestionsAdapter.setSuggestions(it)
+            }
+        })
+
         viewModel.movieDetailsLiveData.observe(this, Observer { movie ->
             movie?.let {
                 startActivity(MovieDetailsActivity.newIntent(this, it))
@@ -97,29 +110,49 @@ class MovieOverviewActivity : BaseActivity(), NetworkConnectivityObserver {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_movie_overview, menu)
-
         val searchItem = menu.findItem(R.id.searchMoviesAction)
-        val searchView = searchItem.actionView as? SearchView
 
-        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let {
-                    if (!it.isEmpty()) {
-                        viewModel.onSearchQuerySubmit(it)
-                    }
-                }
-                return true
-            }
+        searchView = searchItem.actionView as? SearchView
+        searchView?.apply {
+            suggestionsAdapter = movieSuggestionsAdapter
 
-            override fun onQueryTextChange(query: String?): Boolean {
-                query?.let {
-                    if (!it.isEmpty()) {
-                        viewModel.onSearchQueryChange(it)
-                    }
+            setOnSuggestionListener(object : SearchView.OnSuggestionListener {
+                override fun onSuggestionSelect(position: Int): Boolean {
+                    return false
                 }
-                return true
-            }
-        })
+
+                override fun onSuggestionClick(position: Int): Boolean {
+                    movieSuggestionsAdapter.getTitle(position)?.let { movieTitle ->
+                        setQuery(movieTitle, false)
+                        clearFocus()
+                        viewModel.onSearchQuerySubmit(movieTitle)
+                        return true
+                    }
+                    return false
+                }
+            })
+
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    query?.let {
+                        clearFocus()
+                        if (!it.isEmpty()) {
+                            viewModel.onSearchQuerySubmit(it)
+                        }
+                    }
+                    return true
+                }
+
+                override fun onQueryTextChange(query: String?): Boolean {
+                    query?.let {
+                        if (!it.isEmpty()) {
+                            viewModel.onSearchQueryChange(it)
+                        }
+                    }
+                    return true
+                }
+            })
+        }
         return true
     }
 

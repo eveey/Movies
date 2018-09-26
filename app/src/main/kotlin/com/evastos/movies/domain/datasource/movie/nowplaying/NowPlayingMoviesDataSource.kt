@@ -52,7 +52,8 @@ class NowPlayingMoviesDataSource(
             movieDbService.getNowPlaying(
                 page = params.key,
                 region = regionProvider.getSystemRegion()
-            ).applySchedulers()
+            )
+                    .applySchedulers()
                     .mapException(exceptionMapper)
                     .subscribe({ response ->
                         val movies = response.results ?: emptyList()
