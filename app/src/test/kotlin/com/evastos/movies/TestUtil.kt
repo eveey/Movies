@@ -3,8 +3,10 @@ package com.evastos.movies
 import android.arch.lifecycle.MutableLiveData
 import android.arch.paging.PagedList
 import com.evastos.movies.data.model.moviedb.Movie
+import com.evastos.movies.data.model.moviedb.search.SearchMoviesResponse
 import com.evastos.movies.domain.model.Listing
 import com.evastos.movies.domain.model.LoadingState
+import com.evastos.movies.ui.util.region.RegionProvider
 import com.nhaarman.mockito_kotlin.mock
 
 class TestUtil() {
@@ -72,4 +74,17 @@ class TestUtil() {
     val loading = LoadingState.Loading()
     val success = LoadingState.Success()
     val error = LoadingState.Error("errorMsg")
+
+    val searchMoviesResponse = SearchMoviesResponse(
+        page = 1,
+        results = moviesList2,
+        totalPages = 2,
+        totalResults = 2
+    )
+
+    internal class TestRegionProvider : RegionProvider() {
+        override fun getSystemRegion(): String? {
+            return "US"
+        }
+    }
 }
