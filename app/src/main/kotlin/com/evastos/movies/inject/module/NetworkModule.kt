@@ -1,10 +1,7 @@
 package com.evastos.movies.inject.module
 
-import android.content.Context
 import com.evastos.movies.BuildConfig
-import com.evastos.movies.data.encode.Encoder
 import com.evastos.movies.data.network.interceptor.HeadersInterceptor
-import com.evastos.movies.inject.qualifier.AppContext
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -33,7 +30,6 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttp(
-        @AppContext context: Context,
         loggingInterceptor: HttpLoggingInterceptor,
         headersInterceptor: HeadersInterceptor
     ): OkHttpClient {
@@ -52,10 +48,4 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideMoshi(): Moshi = Moshi.Builder().build()
-
-    @Provides
-    @Singleton
-    fun provideEncoder(): Encoder {
-        return Encoder()
-    }
 }

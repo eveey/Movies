@@ -5,7 +5,6 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import android.arch.paging.LivePagedListBuilder
 import android.support.annotation.MainThread
-import com.evastos.movies.data.encode.Encoder
 import com.evastos.movies.data.exception.ExceptionMappers
 import com.evastos.movies.data.model.moviedb.Movie
 import com.evastos.movies.data.rx.applySchedulers
@@ -14,9 +13,9 @@ import com.evastos.movies.data.rx.mapException
 import com.evastos.movies.data.service.moviedb.MovieDbService
 import com.evastos.movies.domain.datasource.movie.nowplaying.NowPlayingMoviesDataSourceFactory
 import com.evastos.movies.domain.datasource.movie.search.SearchMoviesDataSourceFactory
+import com.evastos.movies.domain.exception.ExceptionMessageProviders
 import com.evastos.movies.domain.model.Listing
 import com.evastos.movies.domain.repository.Repositories
-import com.evastos.movies.domain.exception.ExceptionMessageProviders
 import com.evastos.movies.ui.util.region.RegionProvider
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
@@ -26,7 +25,6 @@ class MovieOverviewRepository
     private val movieDbService: MovieDbService,
     private val exceptionMapper: ExceptionMappers.MovieDb,
     private val exceptionMessageProvider: ExceptionMessageProviders.MovieDb,
-    private val encoder: Encoder,
     private val regionProvider: RegionProvider
 ) : Repositories.MovieOverviewRepository {
 
@@ -64,7 +62,7 @@ class MovieOverviewRepository
     @MainThread
     override fun searchMovies(query: String, disposables: CompositeDisposable): Listing<Movie> {
         val sourceFactory = SearchMoviesDataSourceFactory(
-            encoder.encodeUrlQuery(query),
+            query,
             movieDbService,
             exceptionMapper,
             exceptionMessageProvider,
@@ -95,7 +93,7 @@ class MovieOverviewRepository
         disposables.clear()
         disposables.add(
             movieDbService.searchMovies(
-                query = encoder.encodeUrlQuery(query),
+                query = query,
                 region = regionProvider.getSystemRegion()
             )
                     .delayError()
