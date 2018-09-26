@@ -10,13 +10,17 @@ import com.evastos.movies.BuildConfig
 import com.evastos.movies.R
 import com.evastos.movies.data.model.moviedb.Movie
 import com.evastos.movies.inject.module.GlideApp
+import com.evastos.movies.ui.base.network.connectivity.NetworkConnectivityObserver
 import com.evastos.movies.ui.movie.base.BaseActivity
 import com.evastos.movies.ui.util.extensions.loadImage
+import com.evastos.movies.ui.util.extensions.setGone
+import com.evastos.movies.ui.util.extensions.setVisible
 import kotlinx.android.synthetic.main.activity_movie_details.movieBackdropImageView
 import kotlinx.android.synthetic.main.activity_movie_details.movieOverviewTextView
 import kotlinx.android.synthetic.main.activity_movie_details.movieTitleTextView
+import kotlinx.android.synthetic.main.activity_movie_details.networkConnectivityBanner
 
-class MovieDetailsActivity : BaseActivity() {
+class MovieDetailsActivity : BaseActivity(), NetworkConnectivityObserver {
 
     companion object {
         private const val EXTRA_MOVIE = "extraMovie"
@@ -65,5 +69,13 @@ class MovieDetailsActivity : BaseActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onNetworkConnectivityAcquired() {
+        networkConnectivityBanner.setGone()
+    }
+
+    override fun onNetworkConnectivityLost() {
+        networkConnectivityBanner.setVisible()
     }
 }

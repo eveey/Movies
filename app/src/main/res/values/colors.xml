@@ -8,4 +8,5 @@
     <color name="black">@android:color/black</color>
     <color name="moviePressed">#4D000000</color>
     <color name="transparent">@android:color/transparent</color>
+    <color name="loadingBackground">#CC000000</color>
 </resources>
