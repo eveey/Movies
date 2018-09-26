@@ -59,7 +59,6 @@ class SearchMoviesDataSourceTest {
                 .thenReturn("errorMsg")
         whenever(exceptionMessageProvider.getMessage(any<Throwable>())).thenReturn("errorMsg")
 
-
         searchMoviesDataSource = SearchMoviesDataSource(
             query = query,
             movieDbService = movieDbService,

@@ -37,10 +37,9 @@ class MovieDbExceptionMapper
         val responseBody = httpException.response().errorBody()?.string()
         responseBody?.let { errorResponse ->
             try {
-                moshi.adapter(MovieDbError::class.java).fromJson(errorResponse)?.let { error ->
-                    error.statusMessage?.let {
-                        return MovieDbException.ClientException(it)
-                    }
+                val error = moshi.adapter(MovieDbError::class.java).fromJson(errorResponse)
+                if (error != null && !error.statusMessage.isNullOrEmpty()) {
+                    return MovieDbException.ClientException(error.statusMessage)
                 }
             } catch (e: IOException) {
                 Timber.e(e)

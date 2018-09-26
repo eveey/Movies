@@ -50,7 +50,7 @@ class NowPlayingMoviesDataSource(
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Movie>) {
         loadingState.postValue(LoadingState.Loading())
         disposables.add(
-            movieDbService.getNowPlaying(
+            movieDbService.getNowPlayingMovies(
                 page = params.key,
                 region = regionProvider.getSystemRegion()
             )
@@ -79,7 +79,7 @@ class NowPlayingMoviesDataSource(
     ) {
         loadingState.postValue(LoadingState.Loading())
         disposables.add(
-            movieDbService.getNowPlaying(
+            movieDbService.getNowPlayingMovies(
                 page = PAGE_INITIAL,
                 region = regionProvider.getSystemRegion()
             )

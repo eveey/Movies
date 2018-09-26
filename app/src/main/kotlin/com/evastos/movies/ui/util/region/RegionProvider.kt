@@ -1,6 +1,6 @@
 package com.evastos.movies.ui.util.region
 
-import java.util.*
+import java.util.Locale
 
 open class RegionProvider {
 

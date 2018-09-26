@@ -1,10 +1,9 @@
 package com.evastos.movies
 
 import android.arch.lifecycle.MutableLiveData
-import android.arch.paging.DataSource
-import android.arch.paging.PageKeyedDataSource
 import android.arch.paging.PagedList
 import com.evastos.movies.data.model.moviedb.Movie
+import com.evastos.movies.data.model.moviedb.nowplaying.NowPlayingMoviesResponse
 import com.evastos.movies.data.model.moviedb.search.SearchMoviesResponse
 import com.evastos.movies.domain.model.Listing
 import com.evastos.movies.domain.model.LoadingState
@@ -80,6 +79,14 @@ class TestUtil {
     val searchMoviesResponse = SearchMoviesResponse(
         page = 1,
         results = moviesList2,
+        totalPages = 2,
+        totalResults = 2
+    )
+
+    val nowPlayingMoviesResponse = NowPlayingMoviesResponse(
+        page = 1,
+        results = moviesList2,
+        dates = null,
         totalPages = 2,
         totalResults = 2
     )
