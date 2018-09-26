@@ -5,6 +5,6 @@ package com.evastos.movies.domain.model
  */
 sealed class LoadingState {
     class Loading : LoadingState()
-    class LoadingSuccess : LoadingState()
-    class LoadingError(val errorMessage: String) : LoadingState()
+    class Success : LoadingState()
+    class Error(val errorMessage: String) : LoadingState()
 }

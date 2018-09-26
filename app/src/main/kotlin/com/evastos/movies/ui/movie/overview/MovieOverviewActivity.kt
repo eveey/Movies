@@ -74,12 +74,12 @@ class MovieOverviewActivity : BaseActivity(), NetworkConnectivityObserver {
                         loadingStateLoadingView.setVisible()
                         loadingStateErrorView.setGone()
                     }
-                    is LoadingState.LoadingSuccess -> {
+                    is LoadingState.Success -> {
                         loadingStateLoadingView.setGone()
                         swipeRefreshMovies.isRefreshing = false
                         loadingStateErrorView.setGone()
                     }
-                    is LoadingState.LoadingError -> {
+                    is LoadingState.Error -> {
                         loadingStateLoadingView.setGone()
                         swipeRefreshMovies.isRefreshing = false
                         loadingStateErrorView.setVisible()

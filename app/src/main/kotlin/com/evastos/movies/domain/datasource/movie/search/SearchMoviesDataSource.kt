@@ -59,14 +59,14 @@ class SearchMoviesDataSource(
                     .subscribe({ response ->
                         val movies = response.results ?: emptyList()
                         retry = null
-                        loadingState.postValue(LoadingState.LoadingSuccess())
+                        loadingState.postValue(LoadingState.Success())
                         callback.onResult(movies, getNextPage(response))
                     }, {
                         retry = {
                             loadAfter(params, callback)
                         }
                         loadingState.postValue(
-                            LoadingState.LoadingError(exceptionMessageProvider.getMessage(it)))
+                            LoadingState.Error(exceptionMessageProvider.getMessage(it)))
                     }
                     )
         )
@@ -92,14 +92,14 @@ class SearchMoviesDataSource(
                         val movies = response.results ?: emptyList()
 
                         retry = null
-                        loadingState.postValue(LoadingState.LoadingSuccess())
+                        loadingState.postValue(LoadingState.Success())
                         callback.onResult(movies, previousPage, nextPage)
                     }, {
                         retry = {
                             loadInitial(params, callback)
                         }
                         val errorMessage = exceptionMessageProvider.getMessage(it)
-                        loadingState.postValue(LoadingState.LoadingError(errorMessage))
+                        loadingState.postValue(LoadingState.Error(errorMessage))
                     })
         )
     }
