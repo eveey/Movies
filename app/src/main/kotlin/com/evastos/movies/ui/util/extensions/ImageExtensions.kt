@@ -16,8 +16,6 @@ fun GlideRequests.loadImage(
     onLoaded: (() -> Unit)? = null
 ) {
     clear(imageView)
-    imageView.scaleType = ImageView.ScaleType.CENTER_INSIDE
-    imageView.setImageResource(R.drawable.ic_image)
     if (imagePath != null) {
         load(Uri.parse(imagePath))
                 .centerCrop()

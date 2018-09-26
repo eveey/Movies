@@ -18,7 +18,7 @@ abstract class BaseViewModel : ViewModel() {
         super.onCleared()
     }
 
-    fun observeNetworkConnectivity(networkConnectivityObservable: Observable<Boolean>) {
+    fun onCreate(networkConnectivityObservable: Observable<Boolean>) {
         disposables.add(networkConnectivityObservable
                 .distinctUntilChanged()
                 .applySchedulers()

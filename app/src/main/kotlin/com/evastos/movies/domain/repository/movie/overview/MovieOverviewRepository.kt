@@ -1,11 +1,15 @@
 package com.evastos.movies.domain.repository.movie.overview
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import android.arch.paging.LivePagedListBuilder
 import android.support.annotation.MainThread
 import com.evastos.movies.data.encode.Encoder
 import com.evastos.movies.data.exception.ExceptionMappers
 import com.evastos.movies.data.model.moviedb.Movie
+import com.evastos.movies.data.rx.applySchedulers
+import com.evastos.movies.data.rx.mapException
 import com.evastos.movies.data.service.moviedb.MovieDbService
 import com.evastos.movies.domain.datasource.movie.nowplaying.NowPlayingMoviesDataSourceFactory
 import com.evastos.movies.domain.datasource.movie.search.SearchMoviesDataSourceFactory
@@ -59,6 +63,7 @@ class MovieOverviewRepository
     @MainThread
     override fun searchMovies(query: String, disposables: CompositeDisposable): Listing<Movie> {
         val sourceFactory = SearchMoviesDataSourceFactory(
+            encoder.encodeUrlQuery(query),
             movieDbService,
             exceptionMapper,
             exceptionMessageProvider,
@@ -78,5 +83,30 @@ class MovieOverviewRepository
                 sourceFactory.sourceLiveData.value?.invalidate()
             }
         )
+    }
+
+    @MainThread
+    override fun getMovieSuggestions(
+        query: String,
+        disposables: CompositeDisposable
+    ): LiveData<List<Movie>> {
+        val suggestionsLiveData = MutableLiveData<List<Movie>>()
+        disposables.clear()
+        disposables.add(
+            movieDbService.searchMovies(
+                query = encoder.encodeUrlQuery(query),
+                region = regionProvider.getSystemRegion()
+            )
+                    .applySchedulers()
+                    .mapException(exceptionMapper)
+                    .subscribe({ response ->
+                        val movies = response.results ?: emptyList()
+                        suggestionsLiveData.postValue(movies)
+                    }, {
+                        suggestionsLiveData.postValue(null)
+                    }
+                    )
+        )
+        return suggestionsLiveData
     }
 }

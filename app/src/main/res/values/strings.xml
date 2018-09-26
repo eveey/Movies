@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Movies</string>
 
+    <string name="activity_title_movie_details">Movie Details</string>
     <string name="action_search_movies">Search movies</string>
     <string name="action_retry">Retry</string>
     <string name="network_connectivity_banner">No network connection</string>
