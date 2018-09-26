@@ -11,7 +11,7 @@ import com.evastos.movies.R
 import com.evastos.movies.data.model.moviedb.Movie
 import com.evastos.movies.inject.module.GlideApp
 import com.evastos.movies.ui.base.network.connectivity.NetworkConnectivityObserver
-import com.evastos.movies.ui.movie.base.BaseActivity
+import com.evastos.movies.ui.base.BaseActivity
 import com.evastos.movies.ui.util.extensions.loadImage
 import com.evastos.movies.ui.util.extensions.setGone
 import com.evastos.movies.ui.util.extensions.setVisible

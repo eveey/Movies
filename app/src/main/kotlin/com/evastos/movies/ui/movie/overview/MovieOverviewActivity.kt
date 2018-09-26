@@ -14,7 +14,7 @@ import com.evastos.movies.data.model.moviedb.Movie
 import com.evastos.movies.domain.model.LoadingState
 import com.evastos.movies.inject.module.GlideApp
 import com.evastos.movies.ui.base.network.connectivity.NetworkConnectivityObserver
-import com.evastos.movies.ui.movie.base.BaseActivity
+import com.evastos.movies.ui.base.BaseActivity
 import com.evastos.movies.ui.movie.details.MovieDetailsActivity
 import com.evastos.movies.ui.movie.overview.adapter.MoviesAdapter
 import com.evastos.movies.ui.movie.overview.adapter.suggestions.MovieSuggestionsAdapter

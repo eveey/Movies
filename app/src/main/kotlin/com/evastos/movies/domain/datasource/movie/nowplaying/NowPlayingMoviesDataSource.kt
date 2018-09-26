@@ -6,7 +6,7 @@ import com.evastos.movies.data.exception.ExceptionMappers
 import com.evastos.movies.data.model.moviedb.Movie
 import com.evastos.movies.data.model.moviedb.nowplaying.NowPlayingMoviesResponse
 import com.evastos.movies.data.rx.applySchedulers
-import com.evastos.movies.data.rx.delayErrorMillis
+import com.evastos.movies.data.rx.delayError
 import com.evastos.movies.data.rx.mapException
 import com.evastos.movies.data.service.moviedb.MovieDbService
 import com.evastos.movies.domain.model.LoadingState
@@ -27,7 +27,6 @@ class NowPlayingMoviesDataSource(
 
     companion object {
         private const val PAGE_INITIAL = 1
-        private const val ERROR_DELAY = 400L
     }
 
     // keep a function reference for the retry event
@@ -55,7 +54,7 @@ class NowPlayingMoviesDataSource(
                 page = params.key,
                 region = regionProvider.getSystemRegion()
             )
-                    .delayErrorMillis(ERROR_DELAY)
+                    .delayError()
                     .applySchedulers()
                     .mapException(exceptionMapper)
                     .subscribe({ response ->
@@ -84,7 +83,7 @@ class NowPlayingMoviesDataSource(
                 page = PAGE_INITIAL,
                 region = regionProvider.getSystemRegion()
             )
-                    .delayErrorMillis(ERROR_DELAY)
+                    .delayError()
                     .applySchedulers()
                     .mapException(exceptionMapper)
                     .subscribe({ response ->
