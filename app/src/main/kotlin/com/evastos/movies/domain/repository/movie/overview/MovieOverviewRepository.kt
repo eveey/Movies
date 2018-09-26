@@ -16,7 +16,7 @@ import com.evastos.movies.domain.datasource.movie.nowplaying.NowPlayingMoviesDat
 import com.evastos.movies.domain.datasource.movie.search.SearchMoviesDataSourceFactory
 import com.evastos.movies.domain.model.Listing
 import com.evastos.movies.domain.repository.Repositories
-import com.evastos.movies.ui.util.exception.ExceptionMessageProviders
+import com.evastos.movies.domain.exception.ExceptionMessageProviders
 import com.evastos.movies.ui.util.region.RegionProvider
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject

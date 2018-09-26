@@ -2,8 +2,8 @@ package com.evastos.movies.inject.module
 
 import com.evastos.movies.data.exception.ExceptionMappers
 import com.evastos.movies.data.exception.moviedb.MovieDbExceptionMapper
-import com.evastos.movies.ui.util.exception.ExceptionMessageProviders
-import com.evastos.movies.ui.util.exception.moviedb.MovieDbExceptionMessageProvider
+import com.evastos.movies.domain.exception.ExceptionMessageProviders
+import com.evastos.movies.domain.exception.moviedb.MovieDbExceptionMessageProvider
 import dagger.Binds
 import dagger.Module
 

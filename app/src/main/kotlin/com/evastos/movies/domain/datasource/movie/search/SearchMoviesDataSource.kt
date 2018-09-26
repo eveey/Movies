@@ -10,7 +10,7 @@ import com.evastos.movies.data.rx.delayError
 import com.evastos.movies.data.rx.mapException
 import com.evastos.movies.data.service.moviedb.MovieDbService
 import com.evastos.movies.domain.model.LoadingState
-import com.evastos.movies.ui.util.exception.ExceptionMessageProviders
+import com.evastos.movies.domain.exception.ExceptionMessageProviders
 import com.evastos.movies.ui.util.region.RegionProvider
 import io.reactivex.disposables.CompositeDisposable
 

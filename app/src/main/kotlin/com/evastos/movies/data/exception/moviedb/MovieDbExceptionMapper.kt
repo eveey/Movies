@@ -4,6 +4,8 @@ import com.evastos.movies.data.exception.ExceptionMappers
 import com.evastos.movies.data.model.moviedb.error.MovieDbError
 import com.squareup.moshi.Moshi
 import retrofit2.HttpException
+import timber.log.Timber
+import java.io.IOException
 import java.net.ConnectException
 import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
@@ -34,10 +36,14 @@ class MovieDbExceptionMapper
     private fun getExceptionFromResponse(httpException: HttpException): MovieDbException {
         val responseBody = httpException.response().errorBody()?.string()
         responseBody?.let { errorResponse ->
-            moshi.adapter(MovieDbError::class.java).fromJson(errorResponse)?.let { error ->
-                error.statusMessage?.let {
-                    return MovieDbException.ClientException(it)
+            try {
+                moshi.adapter(MovieDbError::class.java).fromJson(errorResponse)?.let { error ->
+                    error.statusMessage?.let {
+                        return MovieDbException.ClientException(it)
+                    }
                 }
+            } catch (e: IOException) {
+                Timber.e(e)
             }
         }
         var exception: MovieDbException = MovieDbException.UnknownException()
