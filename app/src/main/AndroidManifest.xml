@@ -22,7 +22,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.movie.details.MovieDetailsActivity" />
+        <activity
+            android:name=".ui.movie.details.MovieDetailsActivity"
+            android:parentActivityName=".ui.movie.overview.MovieOverviewActivity" />
 
         <receiver android:name=".data.network.connectivity.NetworkConnectivityReceiver">
             <intent-filter>

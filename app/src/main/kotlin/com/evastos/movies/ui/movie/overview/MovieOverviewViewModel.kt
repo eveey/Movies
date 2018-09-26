@@ -6,6 +6,7 @@ import com.evastos.movies.data.model.moviedb.Movie
 import com.evastos.movies.domain.model.Listing
 import com.evastos.movies.domain.model.LoadingState
 import com.evastos.movies.domain.repository.Repositories
+import com.evastos.movies.ui.livedata.SingleLiveEvent
 import com.evastos.movies.ui.movie.base.BaseViewModel
 import javax.inject.Inject
 
@@ -14,8 +15,9 @@ class MovieOverviewViewModel
     private val movieOverviewRepository: Repositories.MovieOverviewRepository
 ) : BaseViewModel() {
 
-    val moviesLiveData: MediatorLiveData<PagedList<Movie>> = MediatorLiveData()
-    val loadingState: MediatorLiveData<LoadingState> = MediatorLiveData()
+    val moviesLiveData = MediatorLiveData<PagedList<Movie>>()
+    val loadingStateLiveData = MediatorLiveData<LoadingState>()
+    val movieDetailsLiveData = SingleLiveEvent<Movie>()
 
     private val nowPlayingMovieListing: Listing<Movie> =
             movieOverviewRepository.getNowPlayingMovies(disposables)
@@ -27,24 +29,24 @@ class MovieOverviewViewModel
         moviesLiveData.addSource(nowPlayingMovieListing.pagedList) {
             moviesLiveData.value = it
         }
-        loadingState.addSource(nowPlayingMovieListing.loadingState) {
-            loadingState.value = it
+        loadingStateLiveData.addSource(nowPlayingMovieListing.loadingState) {
+            loadingStateLiveData.value = it
         }
     }
 
-    fun retryGetMovies() {
+    fun onRetry() {
         retryGetMovies.invoke()
     }
 
-    fun refreshNowPlayingMovies() {
+    fun onRefresh() {
         searchMoviesListing?.let { listing ->
             moviesLiveData.removeSource(listing.pagedList)
-            loadingState.removeSource(listing.loadingState)
+            loadingStateLiveData.removeSource(listing.loadingState)
             moviesLiveData.addSource(nowPlayingMovieListing.pagedList) {
                 moviesLiveData.value = it
             }
-            loadingState.addSource(nowPlayingMovieListing.loadingState) {
-                loadingState.value = it
+            loadingStateLiveData.addSource(nowPlayingMovieListing.loadingState) {
+                loadingStateLiveData.value = it
             }
             retryGetMovies = nowPlayingMovieListing.retry
             searchMoviesListing = null
@@ -52,22 +54,25 @@ class MovieOverviewViewModel
         nowPlayingMovieListing.refresh.invoke()
     }
 
-    fun searchMovies(movieQuery: String) {
+    fun onSearchQuerySubmit(movieQuery: String) {
         searchMoviesListing = movieOverviewRepository.searchMovies(movieQuery, disposables)
         searchMoviesListing?.let { listing ->
             moviesLiveData.removeSource(nowPlayingMovieListing.pagedList)
             moviesLiveData.addSource(listing.pagedList) {
                 moviesLiveData.value = it
             }
-            loadingState.removeSource(nowPlayingMovieListing.loadingState)
-            loadingState.addSource(listing.loadingState) {
-                loadingState.value = it
+            loadingStateLiveData.removeSource(nowPlayingMovieListing.loadingState)
+            loadingStateLiveData.addSource(listing.loadingState) {
+                loadingStateLiveData.value = it
             }
             retryGetMovies = listing.retry
         }
     }
 
-    fun searchMovieSuggestions(movieQuery: String) {
+    fun onSearchQueryChange(movieQuery: String) {
+    }
 
+    fun onMovieClick(movie: Movie?) {
+        movieDetailsLiveData.postValue(movie)
     }
 }

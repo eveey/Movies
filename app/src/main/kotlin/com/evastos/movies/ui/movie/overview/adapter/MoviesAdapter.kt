@@ -51,11 +51,12 @@ class MoviesAdapter(
                 glideRequests.loadImage(posterPath, moviePosterImageView) {
                     movieTitleTextView.setGone()
                 }
-                movieOverlay.debounceClicks().subscribe { _ ->
-                    movie?.let {
-                        movieClickAction.invoke(it)
-                    }
-                }
+                movieOverlay.debounceClicks()
+                        .subscribe { _ ->
+                            movie?.let {
+                                movieClickAction.invoke(it)
+                            }
+                        }
             }
         }
     }

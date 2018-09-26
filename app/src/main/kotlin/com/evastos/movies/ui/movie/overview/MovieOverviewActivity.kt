@@ -15,6 +15,7 @@ import com.evastos.movies.domain.model.LoadingState
 import com.evastos.movies.inject.module.GlideApp
 import com.evastos.movies.ui.base.network.connectivity.NetworkConnectivityObserver
 import com.evastos.movies.ui.movie.base.BaseActivity
+import com.evastos.movies.ui.movie.details.MovieDetailsActivity
 import com.evastos.movies.ui.movie.overview.adapter.MoviesAdapter
 import com.evastos.movies.ui.util.extensions.debounceClicks
 import com.evastos.movies.ui.util.extensions.setGone
@@ -30,8 +31,8 @@ import kotlinx.android.synthetic.main.layout_item_loading_state.loadingStateRetr
 class MovieOverviewActivity : BaseActivity(), NetworkConnectivityObserver {
 
     companion object {
-        private const val MOVIE_COLUMNS_NUM = 2
         private const val HIDE_LOADING_DELAY_MILLIS = 400L
+        private const val MOVIE_COLUMNS_NUM = 2
     }
 
     private lateinit var viewModel: MovieOverviewViewModel
@@ -48,19 +49,19 @@ class MovieOverviewActivity : BaseActivity(), NetworkConnectivityObserver {
 
         moviesRecyclerView.layoutManager = GridLayoutManager(this, MOVIE_COLUMNS_NUM)
         val adapter = MoviesAdapter(GlideApp.with(this)) { movie: Movie? ->
-            // open details screen
+            viewModel.onMovieClick(movie)
         }
         moviesRecyclerView.adapter = adapter
 
         swipeRefreshMovies.setOnRefreshListener {
-            viewModel.refreshNowPlayingMovies()
+            viewModel.onRefresh()
         }
 
         viewModel.moviesLiveData.observe(this, Observer<PagedList<Movie>> { moviesList ->
             adapter.submitList(moviesList)
         })
 
-        viewModel.loadingState.observe(this, Observer { loadingState ->
+        viewModel.loadingStateLiveData.observe(this, Observer { loadingState ->
             loadingState?.let { it ->
                 when (it) {
                     is LoadingState.Loading -> {
@@ -79,11 +80,17 @@ class MovieOverviewActivity : BaseActivity(), NetworkConnectivityObserver {
                             loadingStateErrorView.setVisible()
                             loadingStateErrorTextView.text = it.errorMessage
                             loadingStateRetryButton.debounceClicks().subscribe {
-                                viewModel.retryGetMovies()
+                                viewModel.onRetry()
                             }
                         }
                     }
                 }
+            }
+        })
+
+        viewModel.movieDetailsLiveData.observe(this, Observer { movie ->
+            movie?.let {
+                startActivity(MovieDetailsActivity.newIntent(this, it))
             }
         })
     }
@@ -98,7 +105,7 @@ class MovieOverviewActivity : BaseActivity(), NetworkConnectivityObserver {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
                     if (!it.isEmpty()) {
-                        viewModel.searchMovies(it)
+                        viewModel.onSearchQuerySubmit(it)
                     }
                 }
                 return true
@@ -107,7 +114,7 @@ class MovieOverviewActivity : BaseActivity(), NetworkConnectivityObserver {
             override fun onQueryTextChange(query: String?): Boolean {
                 query?.let {
                     if (!it.isEmpty()) {
-                        viewModel.searchMovieSuggestions(it)
+                        viewModel.onSearchQueryChange(it)
                     }
                 }
                 return true
@@ -118,7 +125,7 @@ class MovieOverviewActivity : BaseActivity(), NetworkConnectivityObserver {
 
     override fun onNetworkConnectivityAcquired() {
         networkConnectivityBanner.setGone()
-        viewModel.retryGetMovies()
+        viewModel.onRetry()
     }
 
     override fun onStop() {

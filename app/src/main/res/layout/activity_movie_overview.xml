@@ -19,8 +19,7 @@
             android:id="@+id/moviesRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dip"
-            app:layoutManager="android.support.v7.widget.GridLayoutManager"
-            />
+            app:layoutManager="android.support.v7.widget.GridLayoutManager" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <include

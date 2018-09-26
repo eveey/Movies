@@ -29,7 +29,7 @@ abstract class BaseActivity : AppCompatActivity() {
         baseViewModel =
                 ViewModelProviders.of(this, viewModelFactory).get(BaseViewModel::class.java)
         networkConnectivityReceiver.observable?.let {
-            baseViewModel.observeNetworkConnectivity(it)
+            baseViewModel.onCreate(it)
         }
 
         if (this is NetworkConnectivityObserver) networkConnectivityObserver = this
