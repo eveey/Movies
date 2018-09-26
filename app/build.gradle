@@ -33,7 +33,7 @@ android {
         }
         buildConfigField STRING, API_KEY, props['apiKey']
         buildConfigField STRING, BASE_API_URL, '"https://api.themoviedb.org/3/"'
-        buildConfigField STRING, BASE_IMAGE_URL, '"http://image.tmdb.org/t/p/w342/"'
+        buildConfigField STRING, BASE_IMAGE_URL, '"http://image.tmdb.org/t/p/"'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

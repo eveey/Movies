@@ -44,7 +44,7 @@ class MoviesAdapter(
                 movieTitleTextView.setVisible()
                 movieTitleTextView.text = movie?.title
                 val posterPath = if (movie?.posterPath != null) {
-                    "${BuildConfig.BASE_IMAGE_URL}${movie.posterPath}"
+                    "${BuildConfig.BASE_IMAGE_URL}w342/${movie.posterPath}"
                 } else {
                     null
                 }

@@ -49,7 +49,7 @@ class MovieDetailsActivity : BaseActivity(), NetworkConnectivityObserver {
 
         viewModel.backdropPhotoLiveData.observe(this, Observer { backdropPath ->
             val backdrop = if (backdropPath != null) {
-                "${BuildConfig.BASE_IMAGE_URL}$backdropPath"
+                "${BuildConfig.BASE_IMAGE_URL}w780/$backdropPath"
             } else {
                 null
             }
