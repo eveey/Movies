@@ -9,13 +9,14 @@ import com.evastos.movies.data.encode.Encoder
 import com.evastos.movies.data.exception.ExceptionMappers
 import com.evastos.movies.data.model.moviedb.Movie
 import com.evastos.movies.data.rx.applySchedulers
+import com.evastos.movies.data.rx.delayError
 import com.evastos.movies.data.rx.mapException
 import com.evastos.movies.data.service.moviedb.MovieDbService
 import com.evastos.movies.domain.datasource.movie.nowplaying.NowPlayingMoviesDataSourceFactory
 import com.evastos.movies.domain.datasource.movie.search.SearchMoviesDataSourceFactory
 import com.evastos.movies.domain.model.Listing
 import com.evastos.movies.domain.repository.Repositories
-import com.evastos.movies.ui.util.exception.ExceptionMessageProviders
+import com.evastos.movies.domain.exception.ExceptionMessageProviders
 import com.evastos.movies.ui.util.region.RegionProvider
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
@@ -97,6 +98,7 @@ class MovieOverviewRepository
                 query = encoder.encodeUrlQuery(query),
                 region = regionProvider.getSystemRegion()
             )
+                    .delayError()
                     .applySchedulers()
                     .mapException(exceptionMapper)
                     .subscribe({ response ->

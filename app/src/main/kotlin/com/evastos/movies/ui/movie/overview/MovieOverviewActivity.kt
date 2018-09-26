@@ -14,7 +14,7 @@ import com.evastos.movies.data.model.moviedb.Movie
 import com.evastos.movies.domain.model.LoadingState
 import com.evastos.movies.inject.module.GlideApp
 import com.evastos.movies.ui.base.network.connectivity.NetworkConnectivityObserver
-import com.evastos.movies.ui.movie.base.BaseActivity
+import com.evastos.movies.ui.base.BaseActivity
 import com.evastos.movies.ui.movie.details.MovieDetailsActivity
 import com.evastos.movies.ui.movie.overview.adapter.MoviesAdapter
 import com.evastos.movies.ui.movie.overview.adapter.suggestions.MovieSuggestionsAdapter
@@ -32,8 +32,7 @@ import kotlinx.android.synthetic.main.layout_item_loading_state.loadingStateRetr
 class MovieOverviewActivity : BaseActivity(), NetworkConnectivityObserver {
 
     companion object {
-        private const val HIDE_LOADING_DELAY_MILLIS = 400L
-        private const val MOVIE_COLUMNS_NUM = 2
+        private const val MOVIE_COLUMNS_COUNT = 2
     }
 
     private lateinit var viewModel: MovieOverviewViewModel
@@ -52,7 +51,7 @@ class MovieOverviewActivity : BaseActivity(), NetworkConnectivityObserver {
         viewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(MovieOverviewViewModel::class.java)
 
-        moviesRecyclerView.layoutManager = GridLayoutManager(this, MOVIE_COLUMNS_NUM)
+        moviesRecyclerView.layoutManager = GridLayoutManager(this, MOVIE_COLUMNS_COUNT)
         val adapter = MoviesAdapter(GlideApp.with(this)) { movie: Movie? ->
             viewModel.onMovieClick(movie)
         }
@@ -75,20 +74,18 @@ class MovieOverviewActivity : BaseActivity(), NetworkConnectivityObserver {
                         loadingStateLoadingView.setVisible()
                         loadingStateErrorView.setGone()
                     }
-                    is LoadingState.LoadingSuccess -> {
-                        hideLoading {
-                            swipeRefreshMovies.isRefreshing = false
-                            loadingStateErrorView.setGone()
-                        }
+                    is LoadingState.Success -> {
+                        loadingStateLoadingView.setGone()
+                        swipeRefreshMovies.isRefreshing = false
+                        loadingStateErrorView.setGone()
                     }
-                    is LoadingState.LoadingError -> {
-                        hideLoading {
-                            swipeRefreshMovies.isRefreshing = false
-                            loadingStateErrorView.setVisible()
-                            loadingStateErrorTextView.text = it.errorMessage
-                            loadingStateRetryButton.debounceClicks().subscribe {
-                                viewModel.onRetry()
-                            }
+                    is LoadingState.Error -> {
+                        loadingStateLoadingView.setGone()
+                        swipeRefreshMovies.isRefreshing = false
+                        loadingStateErrorView.setVisible()
+                        loadingStateErrorTextView.text = it.errorMessage
+                        loadingStateRetryButton.debounceClicks().subscribe {
+                            viewModel.onRetry()
                         }
                     }
                 }
@@ -156,24 +153,17 @@ class MovieOverviewActivity : BaseActivity(), NetworkConnectivityObserver {
         return true
     }
 
-    override fun onNetworkConnectivityAcquired() {
-        networkConnectivityBanner.setGone()
-        viewModel.onRetry()
-    }
-
     override fun onStop() {
         super.onStop()
         handler.removeCallbacksAndMessages(null)
     }
 
-    override fun onNetworkConnectivityLost() {
-        networkConnectivityBanner.setVisible()
+    override fun onNetworkConnectivityAcquired() {
+        networkConnectivityBanner.setGone()
+        viewModel.onRetry()
     }
 
-    private fun hideLoading(afterHide: () -> Unit) {
-        handler.postDelayed({
-            loadingStateLoadingView.setGone()
-            afterHide.invoke()
-        }, HIDE_LOADING_DELAY_MILLIS)
+    override fun onNetworkConnectivityLost() {
+        networkConnectivityBanner.setVisible()
     }
 }

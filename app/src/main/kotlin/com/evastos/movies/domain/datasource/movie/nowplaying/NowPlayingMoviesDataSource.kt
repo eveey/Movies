@@ -6,10 +6,11 @@ import com.evastos.movies.data.exception.ExceptionMappers
 import com.evastos.movies.data.model.moviedb.Movie
 import com.evastos.movies.data.model.moviedb.nowplaying.NowPlayingMoviesResponse
 import com.evastos.movies.data.rx.applySchedulers
+import com.evastos.movies.data.rx.delayError
 import com.evastos.movies.data.rx.mapException
 import com.evastos.movies.data.service.moviedb.MovieDbService
 import com.evastos.movies.domain.model.LoadingState
-import com.evastos.movies.ui.util.exception.ExceptionMessageProviders
+import com.evastos.movies.domain.exception.ExceptionMessageProviders
 import com.evastos.movies.ui.util.region.RegionProvider
 import io.reactivex.disposables.CompositeDisposable
 
@@ -49,23 +50,24 @@ class NowPlayingMoviesDataSource(
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Movie>) {
         loadingState.postValue(LoadingState.Loading())
         disposables.add(
-            movieDbService.getNowPlaying(
+            movieDbService.getNowPlayingMovies(
                 page = params.key,
                 region = regionProvider.getSystemRegion()
             )
+                    .delayError()
                     .applySchedulers()
                     .mapException(exceptionMapper)
                     .subscribe({ response ->
                         val movies = response.results ?: emptyList()
                         retry = null
-                        loadingState.postValue(LoadingState.LoadingSuccess())
+                        loadingState.postValue(LoadingState.Success())
                         callback.onResult(movies, getNextPage(response))
                     }, {
                         retry = {
                             loadAfter(params, callback)
                         }
                         loadingState.postValue(
-                            LoadingState.LoadingError(exceptionMessageProvider.getMessage(it)))
+                            LoadingState.Error(exceptionMessageProvider.getMessage(it)))
                     }
                     )
         )
@@ -77,10 +79,11 @@ class NowPlayingMoviesDataSource(
     ) {
         loadingState.postValue(LoadingState.Loading())
         disposables.add(
-            movieDbService.getNowPlaying(
+            movieDbService.getNowPlayingMovies(
                 page = PAGE_INITIAL,
                 region = regionProvider.getSystemRegion()
             )
+                    .delayError()
                     .applySchedulers()
                     .mapException(exceptionMapper)
                     .subscribe({ response ->
@@ -89,14 +92,14 @@ class NowPlayingMoviesDataSource(
                         val movies = response.results ?: emptyList()
 
                         retry = null
-                        loadingState.postValue(LoadingState.LoadingSuccess())
+                        loadingState.postValue(LoadingState.Success())
                         callback.onResult(movies, previousPage, nextPage)
                     }, {
                         retry = {
                             loadInitial(params, callback)
                         }
                         val errorMessage = exceptionMessageProvider.getMessage(it)
-                        loadingState.postValue(LoadingState.LoadingError(errorMessage))
+                        loadingState.postValue(LoadingState.Error(errorMessage))
                     })
         )
     }

@@ -1,4 +1,4 @@
-package com.evastos.movies.ui.util.exception
+package com.evastos.movies.domain.exception
 
 interface ExceptionMessageProvider<in Exception> {
 

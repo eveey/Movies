@@ -5,7 +5,7 @@ import android.arch.paging.DataSource
 import com.evastos.movies.data.exception.ExceptionMappers
 import com.evastos.movies.data.model.moviedb.Movie
 import com.evastos.movies.data.service.moviedb.MovieDbService
-import com.evastos.movies.ui.util.exception.ExceptionMessageProviders
+import com.evastos.movies.domain.exception.ExceptionMessageProviders
 import com.evastos.movies.ui.util.region.RegionProvider
 import io.reactivex.disposables.CompositeDisposable
 

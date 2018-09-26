@@ -10,7 +10,7 @@ import retrofit2.http.Query
 interface MovieDbService {
 
     @GET("movie/now_playing")
-    fun getNowPlaying(
+    fun getNowPlayingMovies(
         @Query("api_key") apiKey: String = API_KEY,
         @Query("page") page: Int? = null,
         @Query("region") region: String? = null

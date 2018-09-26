@@ -1,10 +1,10 @@
-package com.evastos.movies.ui.util.exception.moviedb
+package com.evastos.movies.domain.exception.moviedb
 
 import android.content.Context
 import com.evastos.movies.R
 import com.evastos.movies.data.exception.moviedb.MovieDbException
 import com.evastos.movies.inject.qualifier.AppContext
-import com.evastos.movies.ui.util.exception.ExceptionMessageProviders
+import com.evastos.movies.domain.exception.ExceptionMessageProviders
 import javax.inject.Inject
 
 class MovieDbExceptionMessageProvider

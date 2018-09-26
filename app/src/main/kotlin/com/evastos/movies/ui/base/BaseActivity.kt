@@ -1,4 +1,4 @@
-package com.evastos.movies.ui.movie.base
+package com.evastos.movies.ui.base
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider

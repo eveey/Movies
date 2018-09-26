@@ -2,7 +2,7 @@ package com.evastos.movies.ui.movie.details
 
 import android.arch.lifecycle.MutableLiveData
 import com.evastos.movies.data.model.moviedb.Movie
-import com.evastos.movies.ui.movie.base.BaseViewModel
+import com.evastos.movies.ui.base.BaseViewModel
 import javax.inject.Inject
 
 class MovieDetailsViewModel

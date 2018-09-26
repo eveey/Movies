@@ -107,7 +107,6 @@ dependencies {
     // Support
     implementation "com.android.support:appcompat-v7:$versions.supportLibVersion"
     implementation "com.android.support:recyclerview-v7:$versions.supportLibVersion"
-    implementation "com.android.support:cardview-v7:$versions.supportLibVersion"
     implementation "com.android.support:design:$versions.supportLibVersion"
     implementation "com.android.support.constraint:constraint-layout:$versions.constraintLayoutVersion"
 
@@ -136,24 +135,18 @@ dependencies {
     // LiveData & ViewModel
     implementation "android.arch.lifecycle:extensions:$versions.archVersion"
     implementation "android.arch.lifecycle:viewmodel:$versions.archVersion"
-    kapt "android.arch.lifecycle:compiler:$versions.archVersion"
 
     // Paging
     implementation "android.arch.paging:runtime:$versions.archPagingVersion"
 
     // RX
-    implementation "io.reactivex.rxjava2:rxjava:$versions.rxJavaVersion"
-    implementation "io.reactivex.rxjava2:rxandroid:$versions.rxAndroidVersion"
     implementation "io.reactivex.rxjava2:rxkotlin:$versions.rxKotlinVersion"
-    implementation "nl.littlerobots.rxlint:rxlint:$versions.rxLintVersion"
 
     // RX binding
     implementation "com.jakewharton.rxbinding2:rxbinding-kotlin:$versions.rxBindingVersion"
 
     // Logging
     implementation "com.jakewharton.timber:timber:$versions.timberVersion"
-    debugImplementation "com.readystatesoftware.chuck:library:$versions.chuckVersion"
-    releaseImplementation "com.readystatesoftware.chuck:library-no-op:$versions.chuckVersion"
 
     // Test
     testImplementation "junit:junit:$versions.junitVersion"

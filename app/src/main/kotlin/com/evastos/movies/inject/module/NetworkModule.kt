@@ -5,7 +5,6 @@ import com.evastos.movies.BuildConfig
 import com.evastos.movies.data.encode.Encoder
 import com.evastos.movies.data.network.interceptor.HeadersInterceptor
 import com.evastos.movies.inject.qualifier.AppContext
-import com.readystatesoftware.chuck.ChuckInterceptor
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -44,7 +43,6 @@ class NetworkModule {
                     readTimeout(NETWORK_TIMEOUT_SECONDS, TimeUnit.SECONDS)
                     writeTimeout(NETWORK_TIMEOUT_SECONDS, TimeUnit.SECONDS)
                     addInterceptor(headersInterceptor)
-                    addInterceptor(ChuckInterceptor(context))
                     if (BuildConfig.DEBUG) {
                         addInterceptor(loggingInterceptor)
                     }

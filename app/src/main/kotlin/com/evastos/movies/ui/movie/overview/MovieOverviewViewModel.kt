@@ -8,7 +8,7 @@ import com.evastos.movies.domain.model.Listing
 import com.evastos.movies.domain.model.LoadingState
 import com.evastos.movies.domain.repository.Repositories
 import com.evastos.movies.ui.livedata.SingleLiveEvent
-import com.evastos.movies.ui.movie.base.BaseViewModel
+import com.evastos.movies.ui.base.BaseViewModel
 import javax.inject.Inject
 
 class MovieOverviewViewModel
@@ -16,13 +16,13 @@ class MovieOverviewViewModel
     private val repository: Repositories.MovieOverviewRepository
 ) : BaseViewModel() {
 
-    // NOW PLAYING MOVIES
+    // NOW PLAYING MOVIES / SEARCHED MOVIES
     val moviesLiveData = MediatorLiveData<PagedList<Movie>>()
 
     // LOADING STATE
     val loadingStateLiveData = MediatorLiveData<LoadingState>()
 
-    // MOVIES SUGGESTIONS
+    // MOVIE SUGGESTIONS
     val movieSuggestionsLiveData = MediatorLiveData<List<Movie>>()
 
     // MOVIE DETAILS
