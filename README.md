@@ -27,10 +27,6 @@ Sample Android app in [Kotlin](https://kotlinlang.org/) for viewing movies that 
 * [OkHttp 3](https://square.github.io/okhttp/3.x/okhttp/)
 * [Square/Moshi](https://github.com/square/moshi) - JSON adapter
 
-## Code quality
-* [Ktlint](https://ktlint.github.io/) - An anti-bikeshedding Kotlin linter with built-in formatter
-* [Detekt](https://github.com/arturbosch/detekt) - Static code analysis for Kotlin
-
 ## Unit tests
 * [JUnit4](https://junit.org/junit4/)
 * [Mockito-Kotlin](https://github.com/nhaarman/mockito-kotlin)
@@ -41,6 +37,9 @@ Sample Android app in [Kotlin](https://kotlinlang.org/) for viewing movies that 
 An image loading and caching library for Android focused on smooth scrolling
 ### Logging
 * [Timber](https://github.com/JakeWharton/timber)
+### Code quality
+* [Ktlint](https://ktlint.github.io/) - An anti-bikeshedding Kotlin linter with built-in formatter
+* [Detekt](https://github.com/arturbosch/detekt) - Static code analysis for Kotlin
 
 ## Roadmap:
 * [Espresso](https://developer.android.com/training/testing/espresso/) - UI testing framework
