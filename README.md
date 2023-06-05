@@ -1,8 +1,8 @@
 # Movies
 
-![launcherIcon](https://github.com/eveey/Movies/blob/master/app/src/main/assets/ic_launcher_web_hi_res.png)
+IMDB
 
-Movies are my thing.
+![launcherIcon](https://github.com/eveey/Movies/blob/master/app/src/main/assets/ic_launcher_web_hi_res.png)
 
 Sample Android app in [Kotlin](https://kotlinlang.org/) for viewing movies that are now playing in theaters from [The Movie DB](https://www.themoviedb.org/).
 
